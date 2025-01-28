@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:h="jakarta.faces.html"
+    xmlns:f="jakarta.faces.core"
+    xmlns:p="http://primefaces.org/ui">
+<h:head>
+    <title>Report Generation</title>
+</h:head>
+<h:body>
+    <h:form id="mainForm">
+        <p:commandButton value="Download PDF" 
+                       actionListener="#{reportDownloadBean.downloadPdf}"
+                       ajax="false">
+            <p:fileDownload value="#{reportDownloadBean.pdfFile}" />
+        </p:commandButton>
+        
+        <p:commandButton value="Download Excel" 
+                       actionListener="#{reportDownloadBean.downloadExcel}"
+                       ajax="false">
+            <p:fileDownload value="#{reportDownloadBean.excelFile}" />
+        </p:commandButton>
+    </h:form>
+</h:body>
+</html>

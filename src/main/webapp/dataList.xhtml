@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" 
+      xmlns:h="jakarta.faces.html"
+      xmlns:f="jakarta.faces.core"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui">
+<h:head>
+    <title>Data Management</title>
+    <style>
+        html, body {
+            height: 100%; /* Ensure the body takes up full height */
+            margin: 0; /* Remove default margins */
+        }
+
+        /* Container for the megaMenu */
+        .megaMenuContainer {
+            display: flex;
+            height: 100vh; /* Full screen height */
+        }
+
+        /* Make the p:megaMenu fill the available height */
+        .p-megaMenu {
+            height: 100%; /* Ensure the menu itself fills the container */
+            width: 200px; /* Set a fixed width for the menu */
+        }
+
+        /* Ensure dynamic content area takes remaining space and is scrollable */
+        #content {
+            flex: 1;
+            padding: 2px;
+            overflow-y: auto; /* Make the content scrollable */
+            height: 100vh; /* Full height of the screen */
+        }
+
+        /* Optional: Add some padding to make the scrollable content easier to navigate */
+        .scrollable-content {
+            padding: 10px;
+        }
+    </style>
+</h:head>
+<h:body>
+    <div class="megaMenuContainer">
+        <p:megaMenu orientation="vertical" autoDisplay="false" style="border:none; padding-right:50px;">
+            <f:facet name="start">
+                <p:graphicImage value="images/logo-protid2.png" library="showcase" style="width: 120px; margin-top:30px;" />
+            </f:facet>
+
+            <p:menuitem value="Users" action="#{menuController.getWay(1)}" update=":content" 
+                         icon="pi pi-fw pi-users" style="width: 120px; margin-top:20px;"/>
+            <p:menuitem value="Welcome" action="#{menuController.getWay(2)}" update=":content" 
+                         icon="pi pi-fw pi-home" />
+        </p:megaMenu>
+
+        <!-- Dynamic Content -->
+        <h:panelGroup id="content" class="scrollable-content">
+            <ui:fragment>
+                <ui:include src="#{menuController.activePage}" />
+            </ui:fragment>
+        </h:panelGroup>
+    </div>
+</h:body>
+</html>
