@@ -7,6 +7,7 @@ import net.sf.dynamicreports.report.builder.component.ComponentBuilder;
 import net.sf.dynamicreports.report.builder.datatype.BigDecimalType;
 import net.sf.dynamicreports.report.builder.style.StyleBuilder;
 import net.sf.dynamicreports.report.builder.tableofcontents.TableOfContentsCustomizerBuilder;
+import net.sf.dynamicreports.report.constant.HorizontalAlignment;
 import net.sf.dynamicreports.report.constant.HorizontalTextAlignment;
 import net.sf.dynamicreports.report.constant.VerticalTextAlignment;
 import net.sf.dynamicreports.report.datasource.DRDataSource;
@@ -16,6 +17,7 @@ import java.awt.*;
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.util.Locale;
+import java.util.ResourceBundle;
 
 import static net.sf.dynamicreports.report.builder.DynamicReports.*;
 
@@ -33,7 +35,7 @@ public abstract class AbstractReport {
     protected static final StyleBuilder bold12CenteredStyle = stl.style(boldCenteredStyle).setFontSize(12);
     protected static final StyleBuilder bold18CenteredStyle = stl.style(boldCenteredStyle).setFontSize(18);
     protected static final StyleBuilder bold22CenteredStyle = stl.style(boldCenteredStyle).setFontSize(22);
-    protected static final StyleBuilder columnStyle = stl.style(rootStyle).setVerticalTextAlignment(VerticalTextAlignment.MIDDLE);
+    protected static final StyleBuilder columnStyle = stl.style(rootStyle).setVerticalTextAlignment(VerticalTextAlignment.MIDDLE).setFontSize(9);
     public static final StyleBuilder columnTitleStyle = stl.style(columnStyle)
             .setBorder(stl.pen1Point())
             .setHorizontalTextAlignment(HorizontalTextAlignment.CENTER)
@@ -90,13 +92,16 @@ public abstract class AbstractReport {
     protected abstract ComponentBuilder<?, ?> createDetailComponent();
 
     // Common reusable components
-    protected ComponentBuilder<?, ?> createTitleComponent(String label) {
-        return cmp.horizontalList()
-                .add(dynamicReportsComponent, cmp.text(label).setStyle(bold18CenteredStyle).setHorizontalTextAlignment(HorizontalTextAlignment.RIGHT))
-                .newRow()
-                .add(cmp.line())
-                .newRow()
-                .add(cmp.verticalGap(10));
+    protected ComponentBuilder<?, ?> createTitleComponent(String title,String resourcelbael) {
+        return cmp.verticalList(
+            cmp.text(title)
+               .setHorizontalAlignment(HorizontalAlignment.CENTER)
+               .setStyle(stl.style().bold().setFontSize(16)),
+            cmp.text(getResourceLabel("Recapclientducamion") + title)
+               .setHorizontalAlignment(HorizontalAlignment.CENTER)
+               .setStyle(stl.style().bold().setFontSize(14))
+    
+        );
     }
 
     protected DRDataSource createDummyDataSource() {
@@ -108,7 +113,7 @@ public abstract class AbstractReport {
     protected StyleBuilder createHeaderStyle() {
         return stl.style()
                 .setBackgroundColor(HEADER_BACKGROUND)
-                .setPadding(4);
+                .setPadding(10).setRadius(15);
     }
 
     protected StyleBuilder createBorderedStyle() {
@@ -140,5 +145,22 @@ public abstract class AbstractReport {
         public String getPattern() {
             return "$ #,###.00";
         }
+    }
+    
+    public String getResourceLabel(String key) {
+        if (key == null || key.trim().isEmpty()) {
+            return ""; // Return empty if key is null or blank
+        }
+        try {
+           // FacesContext context = FacesContext.getCurrentInstance();
+
+            ResourceBundle bundle = ResourceBundle.getBundle("keywords");
+            return bundle.getString(key.trim());
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ""; // Return the key if an exception
+
+        }
+
     }
 }

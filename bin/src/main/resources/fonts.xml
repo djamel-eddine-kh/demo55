@@ -1,0 +1,10 @@
+<fontFamilies>
+    <fontFamily name="DejaVuSansMono">
+        <normal>fonts/DejaVuSansMono.ttf</normal>
+        <bold>fonts/DejaVuSansMono-Bold.ttf</bold>
+        <italic>fonts/DejaVuSansMono-Oblique.ttf</italic>
+        <boldItalic>fonts/DejaVuSansMono-BoldOblique.ttf</boldItalic>
+        <pdfEncoding>Identity-H</pdfEncoding>
+        <pdfEmbedded>true</pdfEmbedded>
+    </fontFamily>
+</fontFamilies>

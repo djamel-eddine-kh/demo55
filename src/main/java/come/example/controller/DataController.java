@@ -50,7 +50,7 @@ public class DataController implements Serializable {
         try {
         	selectedData = new Data();
             data = new Data();
-            list=dataService.fetchComplexDataWithEntityManager();
+           
             		dataList = dataService.dataList();
             logger.info("Controller initialized with {} records.", dataList.size());
         } catch (Exception e) {
