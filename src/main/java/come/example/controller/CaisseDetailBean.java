@@ -8,11 +8,11 @@ import java.util.Map;
 
 @Named
 @SessionScoped
-public class MoneyBean implements Serializable {
+public class CaisseDetailBean implements Serializable {
     private Map<Double, Integer> ticketCounts;
     private double totalAmount;
 
-    public MoneyBean() {
+    public CaisseDetailBean() {
         ticketCounts = new LinkedHashMap<>();
         Double[] denominations = {2000.0, 1000.0, 500.0, 200.0, 100.0, 50.0, 20.0, 10.0, 5.0, 2.0, 1.0, 0.5};
         for (Double denomination : denominations) {

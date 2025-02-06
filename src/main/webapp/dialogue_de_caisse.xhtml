@@ -12,7 +12,7 @@
 
         <h:form id="moneyForm">
             <p:panel header="Enter the number of tickets" style="margin-bottom: 10px;">
-                <p:dataTable value="#{moneyBean.ticketCounts.keySet().toArray()}" var="denomination"
+                <p:dataTable value="#{caisseDetailBean.ticketCounts.keySet().toArray()}" var="denomination"
                     styleClass="ui-datatable-striped ui-datatable-hoverable-rows"
                     style="width: 100%;">
 
@@ -21,15 +21,17 @@
                     </p:column>
 
                     <p:column headerText="Quantity" style="text-align:center;">
-                        <p:spinner value="#{moneyBean.ticketCounts[denomination]}" min="0"
-                            step="1" size="5" style="width: 120px; text-align:center;">
-                            <p:ajax event="change" listener="#{moneyBean.updateTotal}" 
+                        <p:spinner value="#{caisseDetailBean.ticketCounts[denomination]}" min="0"
+                            step="1" size="5" style="width: 120px; text-align:center;"
+                            onkeyup="PrimeFaces.ab({source:this, event:'keyup', update:'@form'});" 
+                            >
+                            <p:ajax event="change" listener="#{caisseDetailBean.updateTotal}"
                                    update="@form" />
                         </p:spinner>
                     </p:column>
 
                     <p:column headerText="Total" style="text-align:center; color:green; font-weight:bold;">
-                        <h:outputText value="#{denomination * moneyBean.ticketCounts[denomination]} DZD" />
+                        <h:outputText value="#{denomination * caisseDetailBean.ticketCounts[denomination]} DZD" />
                     </p:column>
                 </p:dataTable>
             </p:panel>
@@ -38,13 +40,13 @@
 
             <h:panelGrid columns="2" style="width:100%; text-align:center;">
                 <h:outputText value="Total Amount: " style="font-size:18px; font-weight:bold;" />
-                <h:outputText value="#{moneyBean.totalAmount} DZD"
+                <h:outputText value="#{caisseDetailBean.totalAmount} DZD"
                     style="font-size:18px; color:#27ae60; font-weight:bold;" />
             </h:panelGrid>
 
             <div style="text-align: center; margin-top: 10px;">
                 <p:commandButton value="Save" icon="pi pi-save"
-                    actionListener="#{moneyBean.save}"
+                    actionListener="#{caisseDetailBean.save}"
                     styleClass="ui-button-success"
                     style="font-size: 16px; width: 450px; height: 50px;"
                     oncomplete="PF('moneyDialog').hide()" />
