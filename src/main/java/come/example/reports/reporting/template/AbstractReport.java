@@ -1,4 +1,4 @@
-package come.example.BonPreparation.reporting.template;
+package come.example.reports.reporting.template;
 
 import net.sf.dynamicreports.jasper.builder.JasperReportBuilder;
 import net.sf.dynamicreports.report.builder.HyperLinkBuilder;
@@ -18,32 +18,41 @@ import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.util.Locale;
 import java.util.ResourceBundle;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import static net.sf.dynamicreports.report.builder.DynamicReports.*;
 
 public abstract class AbstractReport {
     // Constants for consistent styling
-    protected static final Color HEADER_BACKGROUND = Color.LIGHT_GRAY;
+    private static final Logger LOGGER = Logger.getLogger(come.example.reports.reporting.reports.ClotureTourneeReport.class.getName());
+
+    protected static final Color HEADER_BACKGROUND = Color.decode("#BBDEFB");
+    protected static final Color Product_Card_BACKGROUND = Color.decode("#BBDEFB");
+
     protected static final int DEFAULT_PADDING = 10;
 
     // Styles
     protected static final StyleBuilder rootStyle = stl.style().setPadding(2);
     protected static final StyleBuilder boldStyle = stl.style(rootStyle).bold();
     protected static final StyleBuilder italicStyle = stl.style(rootStyle).italic();
-    protected static final StyleBuilder boldCenteredStyle = stl.style(boldStyle)
+    public static final StyleBuilder boldCenteredStyle = stl.style(boldStyle)
             .setTextAlignment(HorizontalTextAlignment.CENTER, VerticalTextAlignment.MIDDLE);
     protected static final StyleBuilder bold12CenteredStyle = stl.style(boldCenteredStyle).setFontSize(12);
     protected static final StyleBuilder bold18CenteredStyle = stl.style(boldCenteredStyle).setFontSize(18);
     protected static final StyleBuilder bold22CenteredStyle = stl.style(boldCenteredStyle).setFontSize(22);
-    protected static final StyleBuilder columnStyle = stl.style(rootStyle).setVerticalTextAlignment(VerticalTextAlignment.MIDDLE).setFontSize(9);
+    protected static final StyleBuilder columnStyle = stl.style(rootStyle).setVerticalTextAlignment(VerticalTextAlignment.MIDDLE).setFontSize(9).setPadding(8);
     public static final StyleBuilder columnTitleStyle = stl.style(columnStyle)
             .setBorder(stl.pen1Point())
             .setHorizontalTextAlignment(HorizontalTextAlignment.CENTER)
-            .setBackgroundColor(Color.LIGHT_GRAY)
+            .setBackgroundColor(HEADER_BACKGROUND)
             .bold();
     public static final StyleBuilder groupStyle = stl.style(boldStyle).setHorizontalTextAlignment(HorizontalTextAlignment.LEFT);
-    public static final StyleBuilder subtotalStyle = stl.style(boldStyle).setTopBorder(stl.pen1Point());
+    public static final StyleBuilder subtotalStyle = stl.style(boldStyle).setTopBorder(stl.pen1Point()).setBackgroundColor(HEADER_BACKGROUND);
 
+    private String fontName = "DejaVuSansMono";
+    private int titleFontSize = 16;
+    private int columnFontSize = 11;
     // Template
     public static final ReportTemplateBuilder reportTemplate;
 
@@ -66,8 +75,8 @@ public abstract class AbstractReport {
                 .highlightDetailEvenRows()
                 .crosstabHighlightEvenRows()
                 .setCrosstabGroupStyle(stl.style(columnTitleStyle))
-                .setCrosstabGroupTotalStyle(stl.style(columnTitleStyle).setBackgroundColor(new Color(170, 170, 170)))
-                .setCrosstabGrandTotalStyle(stl.style(columnTitleStyle).setBackgroundColor(new Color(140, 140, 140)))
+                .setCrosstabGroupTotalStyle(stl.style(columnTitleStyle).setBackgroundColor( Color.decode("#B2EBF2")))
+                .setCrosstabGrandTotalStyle(stl.style(columnTitleStyle).setBackgroundColor(Color.decode("#B2DFDB")))
                 .setCrosstabCellStyle(stl.style(columnStyle).setBorder(stl.pen1Point()))
                 .setTableOfContentsCustomizer(tableOfContentsCustomizer);
 
@@ -115,11 +124,16 @@ public abstract class AbstractReport {
                 .setBackgroundColor(HEADER_BACKGROUND)
                 .setPadding(10).setRadius(15);
     }
-
-    protected StyleBuilder createBorderedStyle() {
+    protected StyleBuilder createHeaderStyle(Color color) {
+        return stl.style()
+                .setBackgroundColor(color)
+                .setPadding(10).setRadius(15);
+    }
+    protected StyleBuilder createBorderedStyle(Color color) {
         return stl.style()
                 .setBorder(stl.pen1Point())
-                .setPadding(DEFAULT_PADDING);
+                .setPadding(DEFAULT_PADDING)
+                .setBackgroundColor(color);
     }
 
     protected String formatCurrentTimestamp() {
@@ -146,7 +160,19 @@ public abstract class AbstractReport {
             return "$ #,###.00";
         }
     }
-    
+    /**
+     * Parses a color string into a Color object.
+     */
+    protected Color parseColor(String colorString) {
+        try {
+            return colorString.startsWith("#")
+                    ? Color.decode(colorString)
+                    : (Color) Color.class.getField(colorString.toUpperCase()).get(null);
+        } catch (Exception e) {
+            LOGGER.log(Level.WARNING, "Invalid color: {0}", colorString);
+            return Color.CYAN;
+        }
+    }
     public String getResourceLabel(String key) {
         if (key == null || key.trim().isEmpty()) {
             return ""; // Return empty if key is null or blank
@@ -163,4 +189,5 @@ public abstract class AbstractReport {
         }
 
     }
+
 }

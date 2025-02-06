@@ -1,10 +1,23 @@
 <ui:composition 
     xmlns="http://www.w3.org/1999/xhtml"
     xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
-     xmlns:h="jakarta.faces.html"
-      xmlns:f="jakarta.faces.core"
-      xmlns:p="http://primefaces.org/ui"> 
-        <div class="card crud-demo" style=" margin:4px" >
-        <h1>hello</h1>
+    xmlns:h="jakarta.faces.html"
+    xmlns:f="jakarta.faces.core"
+    xmlns:p="http://primefaces.org/ui">
+
+    <h:head>
+        <title>Money Calculator</title>
+    </h:head>
+    
+    <h:body>
+        <div class="card crud-demo" style="margin: 10px; text-align: center;">
+            <h1 style="color: #2c3e50;">Money Calculator</h1>
+            <p:commandButton value="Open Calculator" icon="pi pi-calculator"
+                onclick="PF('moneyDialog').show()"
+                styleClass="ui-button-raised ui-button-success" />
         </div>
-      </ui:composition>
+
+        <!-- Include the dialog from a separate file -->
+        <ui:include src="dialogue_de_caisse.xhtml" />
+    </h:body>
+</ui:composition>

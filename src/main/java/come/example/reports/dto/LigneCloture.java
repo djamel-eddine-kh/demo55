@@ -1,7 +1,7 @@
-package come.example.BonPreparation.dto;
+package come.example.reports.dto;
 
-public class CloturetourneeDto {
-
+public class LigneCloture {
+        private String ReportTitle;
 		private String produit;
 	    private Double stockDepart;
 	    private Double chargement;
@@ -11,11 +11,17 @@ public class CloturetourneeDto {
 	    private Double retourStock;
 	    private Double stockFinJournee;
 	    private Double ecartStock;
-	  
-	    
-	
-		public CloturetourneeDto(String produit, Double stockDepart, Double chargement, Double vente, Double livraison,
-				Double retour, Double retourStock, Double stockFinJournee, Double ecartStock) {
+
+	public String getReportTitle() {
+		return ReportTitle;
+	}
+
+	public void setReportTitle(String reportTitle) {
+		ReportTitle = reportTitle;
+	}
+
+	public LigneCloture(String produit, Double stockDepart, Double chargement, Double vente, Double livraison,
+						Double retour, Double retourStock, Double stockFinJournee, Double ecartStock) {
 		 
 			this.produit = produit;
 			this.stockDepart = stockDepart;

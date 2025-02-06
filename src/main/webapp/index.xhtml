@@ -9,15 +9,15 @@
 <h:body>
     <h:form id="mainForm">
         <p:commandButton value="Download PDF" 
-                       actionListener="#{reportDownloadBean.downloadPdf}"
+                       actionListener="#{reportController.generateReport('PDF')}"
                        ajax="false">
-            <p:fileDownload value="#{reportDownloadBean.pdfFile}" />
+            <p:fileDownload value="#{reportController.report}" />
         </p:commandButton>
         
         <p:commandButton value="Download Excel" 
-                       actionListener="#{reportDownloadBean.downloadExcel}"
+                       actionListener="#{reportController.generateReport('Excel')}"
                        ajax="false">
-            <p:fileDownload value="#{reportDownloadBean.excelFile}" />
+            <p:fileDownload value="#{reportController.report}" />
         </p:commandButton>
     </h:form>
 </h:body>

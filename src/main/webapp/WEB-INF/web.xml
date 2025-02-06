@@ -10,7 +10,7 @@
   </welcome-file-list>
 <context-param>
     <param-name>primefaces.THEME</param-name>
-    <param-value>nova-light</param-value>
+    <param-value>saga</param-value>
 </context-param>
 
   <!-- JSF Configuration -->
@@ -27,14 +27,7 @@
         <url-pattern>*.xhtml</url-pattern>
     </servlet-mapping>
        <!-- Servlet Mapping for HelloServlet -->
-    <servlet>
-        <servlet-name>helloservlet</servlet-name>
-        <servlet-class>helloservlet</servlet-class>
-    </servlet>
-    <servlet-mapping>
-        <servlet-name>helloservlet</servlet-name>
-        <url-pattern>/hello</url-pattern>
-    </servlet-mapping>
+   
     <context-param>
         <param-name>jakarta.faces.AUTOMATIC_EXTENSIONLESS_MAPPING</param-name>
         <param-value>true</param-value>
@@ -50,9 +43,6 @@
     <listener>
     <listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
 </listener>
-<context-param>
-    <param-name>primefaces.THEME</param-name>
-    <param-value>saga</param-value>
-</context-param>
+
 
 </web-app>

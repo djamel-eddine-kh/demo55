@@ -1,0 +1,66 @@
+<ui:composition 
+    xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+    xmlns:h="jakarta.faces.html"
+    xmlns:f="jakarta.faces.core"
+    xmlns:p="http://primefaces.org/ui">
+
+    <p:dialog header="Money Ticket Calculator" widgetVar="moneyDialog" modal="true"
+          width="600" resizable="false" closable="true" id="moneyDialog"
+          style="max-height: 80vh; overflow-y: auto;"
+          onShow="addDialogCloseEvent();">
+
+        <h:form id="moneyForm">
+            <p:panel header="Enter the number of tickets" style="margin-bottom: 10px;">
+                <p:dataTable value="#{moneyBean.ticketCounts.keySet().toArray()}" var="denomination"
+                    styleClass="ui-datatable-striped ui-datatable-hoverable-rows"
+                    style="width: 100%;">
+
+                    <p:column headerText="Denomination" style="text-align:center; font-weight: bold;">
+                        <h:outputText value="#{denomination} DZD" />
+                    </p:column>
+
+                    <p:column headerText="Quantity" style="text-align:center;">
+                        <p:spinner value="#{moneyBean.ticketCounts[denomination]}" min="0"
+                            step="1" size="5" style="width: 120px; text-align:center;">
+                            <p:ajax event="change" listener="#{moneyBean.updateTotal}" 
+                                   update="@form" />
+                        </p:spinner>
+                    </p:column>
+
+                    <p:column headerText="Total" style="text-align:center; color:green; font-weight:bold;">
+                        <h:outputText value="#{denomination * moneyBean.ticketCounts[denomination]} DZD" />
+                    </p:column>
+                </p:dataTable>
+            </p:panel>
+
+            <p:separator/>
+
+            <h:panelGrid columns="2" style="width:100%; text-align:center;">
+                <h:outputText value="Total Amount: " style="font-size:18px; font-weight:bold;" />
+                <h:outputText value="#{moneyBean.totalAmount} DZD"
+                    style="font-size:18px; color:#27ae60; font-weight:bold;" />
+            </h:panelGrid>
+
+            <div style="text-align: center; margin-top: 10px;">
+                <p:commandButton value="Save" icon="pi pi-save"
+                    actionListener="#{moneyBean.save}"
+                    styleClass="ui-button-success"
+                    style="font-size: 16px; width: 450px; height: 50px;"
+                    oncomplete="PF('moneyDialog').hide()" />
+            </div>
+        </h:form>
+    </p:dialog>
+    <h:outputScript>
+    function addDialogCloseEvent() {
+        setTimeout(function () {
+            let dialogOverlay = document.querySelector(".ui-widget-overlay");
+            if (dialogOverlay) {
+                dialogOverlay.addEventListener("click", function () {
+                    PF('moneyDialog').hide();
+                });
+            }
+        }, 100);
+    }
+</h:outputScript>
+</ui:composition>

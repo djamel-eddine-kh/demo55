@@ -1,10 +1,11 @@
-package come.example.BonPreparation.reporting;
+package come.example.reports.reporting.reports;
 
 
-import come.example.BonPreparation.dto.BonPreparationDto;
-import come.example.BonPreparation.reporting.template.AbstractReport;
+
+import com.protid.commerciale.business.model.bo.Parameters;
+import come.example.reports.dto.BonPreparationDto;
+import come.example.reports.reporting.template.AbstractReport;
 import net.sf.dynamicreports.jasper.builder.JasperReportBuilder;
-import net.sf.dynamicreports.report.builder.MarginBuilder;
 import net.sf.dynamicreports.report.builder.component.ComponentBuilder;
 import net.sf.dynamicreports.report.builder.component.VerticalListBuilder;
 import net.sf.dynamicreports.report.constant.HorizontalTextAlignment;
@@ -14,41 +15,61 @@ import java.awt.*;
 import java.util.List;
 import java.util.Map;
 import java.util.ResourceBundle;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
 import static net.sf.dynamicreports.report.builder.DynamicReports.*;
 
-public class ReportingServiceImpl extends AbstractReport {
-
+public class BonPreparationReport extends AbstractReport {
+    private static final Logger LOGGER = Logger.getLogger(ClotureTourneeReport.class.getName());
     private final List<BonPreparationDto> bonPreparationList;
-    private final boolean isExcelFormat;
+    protected  Color header_background = Color.decode("#BBDEFB");
+    protected  Color product_Card_Backround = Color.decode("#BBDEFB");
+    private String fontName = "DejaVuSansMono";
+    private int titleFontSize = 16;
+    private int columnFontSize = 11;
 
-    public ReportingServiceImpl(Object bonPreparationList, boolean isExcelFormat) {
+    public BonPreparationReport(Object bonPreparationList,  List<Parameters> configs) {
         this.bonPreparationList = (List<BonPreparationDto>) bonPreparationList;
-        this.isExcelFormat = isExcelFormat;
+        initializeConfigurations(configs);
     }
+    private void initializeConfigurations(List<Parameters> configs) {
+        for (Parameters dto : configs) {
+            try {
+                String key = dto.getClef();
+                String value = dto.getValeur();
 
+                switch (key) {
+                    case "fontName" -> this.fontName = value;
+                    case "titleFontSize" -> this.titleFontSize = Integer.parseInt(value);
+                    case "columnFontSize" -> this.columnFontSize = Integer.parseInt(value);
+                    case "headerColor" -> this.header_background = parseColor(value);
+                    case "productCardBackround" -> this.product_Card_Backround = parseColor(value);
+                    default -> LOGGER.warning("Unknown configuration key: " + key);
+                }
+            } catch (Exception e) {
+                LOGGER.log(Level.WARNING, "Error processing configuration: " + dto.getDescription(), e);
+            }
+        }
+    }
     @Override
     public JasperReportBuilder build() throws DRException {
         JasperReportBuilder reportBuilder = report()
                 .setTemplate(AbstractReport.reportTemplate)
+                .setTextStyle(stl.style().setFontName(fontName))
                 .title(createTitleComponent())
                 .pageHeader(createPageHeaderComponent())
                 .detail(createDetailComponent())
                 .setDataSource(createDummyDataSource());
-
-        // Customize for Excel
-        if (isExcelFormat) {
-
-        }
 
         return reportBuilder;
     }
     @Override
     protected ComponentBuilder<?, ?> createTitleComponent() {
         return cmp.verticalList(
-                cmp.text(getResourceLabel("depot") + bonPreparationList.get(0).getLibelleDepot())
-                        .setStyle(stl.style().bold().setFontSize(18)
+                cmp.text(getResourceLabel("depot") + " " +bonPreparationList.get(0).getLibelleDepot())
+                        .setStyle(stl.style().bold().setFontSize(titleFontSize)
                                 .setHorizontalTextAlignment(HorizontalTextAlignment.CENTER)),
                 cmp.verticalGap(10));
     }
@@ -57,7 +78,7 @@ public class ReportingServiceImpl extends AbstractReport {
     protected ComponentBuilder<?, ?> createPageHeaderComponent() {
         return cmp.verticalList(
                 cmp.horizontalList()
-                        .setStyle(createHeaderStyle())
+                        .setStyle(createHeaderStyle(header_background))
                         .add(preparationInfoComponent())
                         .add(formattedDateComponent(formatCurrentTimestamp()))
                         .newRow().add(cmp.verticalGap(5)),
@@ -102,7 +123,7 @@ public class ReportingServiceImpl extends AbstractReport {
 
     private ComponentBuilder<?, ?> createProductVariant(String pieceName, List<BonPreparationDto> pieceVariants) {
         VerticalListBuilder categoryBox = cmp.verticalList()
-                .setStyle(createBorderedStyle())
+                .setStyle(createBorderedStyle(product_Card_Backround))
                 .add(categoryHeaderComponent(pieceName)); // Single header for the piece name
 
         // Add each variant (e.g., client details, quantity)
@@ -156,7 +177,7 @@ public class ReportingServiceImpl extends AbstractReport {
 
     private ComponentBuilder<?, ?> preparationInfoComponent() {
         return cmp.text(getResourceLabel("BondePreparation") + bonPreparationList.get(0).getNomChauffeur())
-                .setStyle(stl.style().setFontSize(12));
+                .setStyle(stl.style().setFontSize(columnFontSize));
     }
 
     private ComponentBuilder<?, ?> formattedDateComponent(String date) {
@@ -166,7 +187,7 @@ public class ReportingServiceImpl extends AbstractReport {
     }
 
     private ComponentBuilder<?, ?> marqueInfoComponent() {
-        return cmp.text(getResourceLabel("marque") + bonPreparationList.get(0).getLibelleDepot())
+        return cmp.text(getResourceLabel("marque")+" " + bonPreparationList.get(0).getLibelleDepot())
                 .setStyle(stl.style().setFontSize(10)
                         .setHorizontalTextAlignment(HorizontalTextAlignment.LEFT));
     }

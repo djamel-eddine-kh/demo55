@@ -1,4 +1,4 @@
-package come.example.BonPreparation.dto;
+package come.example.reports.dto;
 
 public class TotalClotureTourneeDto {
 	  private Double totalstockDepart;
