@@ -1,10 +1,17 @@
 package come.example.controller;
 
-import jakarta.enterprise.context.SessionScoped;
-import jakarta.inject.Named;
+
+
+
 import java.io.Serializable;
+
 import java.util.LinkedHashMap;
 import java.util.Map;
+
+import jakarta.enterprise.context.SessionScoped;
+import jakarta.inject.Named;
+
+
 
 @Named
 @SessionScoped
@@ -16,7 +23,7 @@ public class CaisseDetailBean implements Serializable {
         ticketCounts = new LinkedHashMap<>();
         Double[] denominations = {2000.0, 1000.0, 500.0, 200.0, 100.0, 50.0, 20.0, 10.0, 5.0, 2.0, 1.0, 0.5};
         for (Double denomination : denominations) {
-            ticketCounts.put(denomination, 0);
+            ticketCounts.put(denomination, null);
         }
         totalAmount = 0;
     }
@@ -81,7 +88,7 @@ public class CaisseDetailBean implements Serializable {
             } else if (value instanceof Integer) {
                 quantity = (Integer) value;
             } else {
-                quantity = 0;
+                quantity = null;
             }
             ticketCounts.put(denomination, quantity);
             updateTotal();

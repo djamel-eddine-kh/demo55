@@ -1,9 +1,9 @@
 <ui:composition 
-    xmlns="http://www.w3.org/1999/xhtml"
-    xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
-    xmlns:h="jakarta.faces.html"
-    xmlns:f="jakarta.faces.core"
-    xmlns:p="http://primefaces.org/ui">
+    xmlns="http://www.w3.org/1999/xhtml" 
+      xmlns:h="jakarta.faces.html"
+      xmlns:f="jakarta.faces.core"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui">
 
     <h:head>
         <title>Money Calculator</title>
@@ -11,6 +11,8 @@
     
     <h:body>
         <div class="card crud-demo" style="margin: 10px; text-align: center;">
+        <h:outputText value="#{var['produit']}" />
+        
             <h1 style="color: #2c3e50;">Money Calculator</h1>
             <p:commandButton value="Open Calculator" icon="pi pi-calculator"
                 onclick="PF('moneyDialog').show()"

@@ -1,14 +1,13 @@
-<ui:composition 
-    xmlns="http://www.w3.org/1999/xhtml"
-    xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
-    xmlns:h="jakarta.faces.html"
-    xmlns:f="jakarta.faces.core"
-    xmlns:p="http://primefaces.org/ui">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" 
+      xmlns:h="jakarta.faces.html"
+      xmlns:f="jakarta.faces.core"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui">
 
     <p:dialog header="Money Ticket Calculator" widgetVar="moneyDialog" modal="true"
-          width="600" resizable="false" closable="true" id="moneyDialog"
+          width="600" resizable="false" id="moneyDialog"
           style="max-height: 80vh; overflow-y: auto;"
-          onShow="addDialogCloseEvent();">
+          onShow="addDialogCloseEvent();" closable="false">
 
         <h:form id="moneyForm">
             <p:panel header="Enter the number of tickets" style="margin-bottom: 10px;">
@@ -21,13 +20,15 @@
                     </p:column>
 
                     <p:column headerText="Quantity" style="text-align:center;">
-                        <p:spinner value="#{caisseDetailBean.ticketCounts[denomination]}" min="0"
+                        <p:inputText value="#{caisseDetailBean.ticketCounts[denomination]}" min="0"
                             step="1" size="5" style="width: 120px; text-align:center;"
+                            type="number"
                             onkeyup="PrimeFaces.ab({source:this, event:'keyup', update:'@form'});" 
-                            >
+                            onkeypress="handleEnterKey(event)"
+                             >
                             <p:ajax event="change" listener="#{caisseDetailBean.updateTotal}"
                                    update="@form" />
-                        </p:spinner>
+                        </p:inputText>
                     </p:column>
 
                     <p:column headerText="Total" style="text-align:center; color:green; font-weight:bold;">
@@ -53,16 +54,74 @@
             </div>
         </h:form>
     </p:dialog>
-    <h:outputScript>
+<h:outputScript>
     function addDialogCloseEvent() {
         setTimeout(function () {
-            let dialogOverlay = document.querySelector(".ui-widget-overlay");
+            let dialogOverlay = document.querySelector('.ui-widget-overlay');
             if (dialogOverlay) {
-                dialogOverlay.addEventListener("click", function () {
+                dialogOverlay.addEventListener('click', function () {
                     PF('moneyDialog').hide();
                 });
             }
         }, 100);
     }
+
+    function enableTabNavigation() {
+        setTimeout(function () {
+            let inputs = document.querySelectorAll('#moneyForm input[type="number"]');
+
+            inputs.forEach((input, index) => {
+                input.addEventListener('keydown', function (event) {
+                    // Prevent default Tab behavior to move between inputs
+                    if (event.key === 'Tab') {
+                        event.preventDefault(); // Prevent default tab behavior
+                        let nextInput = inputs[index + (event.shiftKey ? -1 : 1)];
+                        if (nextInput) {
+                            nextInput.focus();
+                        }
+                    }
+
+                    // Prevent default form submission and dialog close on Enter
+                    if (event.key === 'Enter') {
+                        event.preventDefault(); // Prevent form submission or dialog closing
+                        
+                        let nextInput = inputs[index + 1]; // Move to the next input
+                        if (nextInput) {
+                            nextInput.focus();
+                        }
+                    }
+                });
+            });
+        }, 200); // Adding delay to ensure inputs are fully rendered
+    }
+
+
+    // Disable Enter key behavior on form submission and dialog close
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'Enter') {
+            // Prevent default behavior (form submission / dialog closing)
+            e.preventDefault();
+            
+            // Find all input fields in the form
+            const inputs = document.querySelectorAll('#moneyForm input[type="number"]');
+            
+            // Find the current input element that has focus
+            let currentIndex = Array.from(inputs).indexOf(document.activeElement);
+            
+            // If it's the last input, stay focused on it
+            if (currentIndex === inputs.length - 1) return;
+            
+            // Move focus to the next input field
+            let nextInput = inputs[currentIndex + 1];
+            if (nextInput) {
+                nextInput.focus();
+            }
+        }
+    });
 </h:outputScript>
+
+
+
+
+
 </ui:composition>

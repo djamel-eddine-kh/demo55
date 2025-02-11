@@ -1,0 +1,66 @@
+  <ui:composition xmlns="http://www.w3.org/1999/xhtml" 
+      xmlns:h="jakarta.faces.html"
+      xmlns:f="jakarta.faces.core"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui">
+      <h:form>
+        <p:panel header="Fiche Controle Details" styleClass="info-card">
+            <h:panelGrid columns="2" cellpadding="5">
+                <h:outputText value="Date Début Contrôle:" styleClass="info-label"/>
+                <h:outputText value="#{ficheControleBean.dto.dateDC}"/>
+                
+                <h:outputText value="Date Fin Contrôle:" styleClass="info-label"/>
+                <h:outputText value="#{ficheControleBean.dto.dateDF}"/>
+                
+                <h:outputText value="Code Article:" styleClass="info-label"/>
+                <h:outputText value="#{ficheControleBean.dto.codeArticle}"/>
+                
+                <h:outputText value="Désignation:" styleClass="info-label"/>
+                <h:outputText value="#{ficheControleBean.dto.designation}"/>
+                
+                <h:outputText value="Numéro de Lot:" styleClass="info-label"/>
+                <h:outputText value="#{ficheControleBean.dto.numLot}"/>
+                
+                <h:outputText value="Quantité:" styleClass="info-label"/>
+                <h:outputText value="#{ficheControleBean.dto.quantity}"/>
+            </h:panelGrid>
+        </p:panel>
+    
+        <p:panel header="Liste des Références">
+            <p:dataTable var="ref" value="#{referenceBean.references}" paginator="true" rows="10">
+                <p:column headerText="ID">
+                    <h:outputText value="#{ref.id}"/>
+                </p:column>
+                <p:column headerText="Libellé">
+                    <h:outputText value="#{ref.libelle}"/>
+                </p:column>
+                <p:column headerText="Désignation 1">
+                    <h:outputText value="#{ref.designation1}"/>
+                </p:column>
+                <p:column headerText="Désignation 2">
+                    <h:outputText value="#{ref.designation2}"/>
+                </p:column>
+                <p:column headerText="Actions">
+                    <p:commandButton value="Modifier" icon="pi pi-pencil" actionListener="#{referenceBean.edit(ref)}" update=":dialogs:refDialog" oncomplete="PF('refDialog').show()"/>
+                    <p:commandButton value="Supprimer" icon="pi pi-trash" actionListener="#{referenceBean.delete(ref)}" update=":form:table"/>
+                </p:column>
+            </p:dataTable>
+        </p:panel>
+    </h:form>
+    
+    <h:form id="dialogs">
+        <p:dialog header="Modifier Référence" widgetVar="refDialog" modal="true">
+            <h:panelGrid columns="2">
+                <h:outputLabel for="libelle" value="Libellé:"/>
+                <p:inputText id="libelle" value="#{referenceBean.selectedReference.libelle}" required="true"/>
+                
+                <h:outputLabel for="designation1" value="Désignation 1:"/>
+                <p:inputText id="designation1" value="#{referenceBean.selectedReference.designation1}" required="true"/>
+                
+                <h:outputLabel for="designation2" value="Désignation 2:"/>
+                <p:inputText id="designation2" value="#{referenceBean.selectedReference.designation2}" required="true"/>
+            </h:panelGrid>
+            <p:commandButton value="Enregistrer" actionListener="#{referenceBean.save()}" oncomplete="PF('refDialog').hide()" update=":form:table"/>
+        </p:dialog>
+    </h:form>
+    </ui:composition>

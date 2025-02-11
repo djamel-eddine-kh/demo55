@@ -1,23 +1,15 @@
 package come.example;
 
 import org.hibernate.SessionFactory;
-import org.springframework.context.annotation.Bean;
+
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.EnableAspectJAutoProxy;
-import org.springframework.jdbc.datasource.DataSourceTransactionManager;
-import org.springframework.orm.hibernate5.LocalSessionFactoryBean;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
-import org.springframework.transaction.PlatformTransactionManager;
-
-import com.mchange.v2.c3p0.ComboPooledDataSource;
-
-import javax.sql.DataSource;
 
 @Configuration
 @EnableTransactionManagement
 @ComponentScan(basePackages = "app.springhibernate")  // Enabling component scanning
-@EnableAspectJAutoProxy // If you are using Aspect-Oriented Programming (AOP)
+//@EnableAspectJAutoProxy // If you are using Aspect-Oriented Programming (AOP)
 public class AppConfig {
 
     /* DataSource Bean configuration (using C3P0 Connection Pool)

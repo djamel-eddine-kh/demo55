@@ -24,7 +24,7 @@
         <property name="maxIdleTime" value="300" />
     </bean>
 
-    <!-- JPA EntityManagerFactory Configuration -->
+    <!-- JPA EntityManagerFactory Configuration
     <bean id="entityManagerFactory" class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean">
         <property name="dataSource" ref="myDataSource" />
         <property name="packagesToScan" value="come.example.model" />
@@ -42,10 +42,26 @@
         </property>
     </bean>
 
-    <!-- JPA Transaction Manager -->
+   
+  JPA Transaction Manager 
     <bean id="transactionManager" class="org.springframework.orm.jpa.JpaTransactionManager">
         <property name="entityManagerFactory" ref="entityManagerFactory" />
-    </bean>
+    </bean>-->
+    
+    <!-- Hibernate SessionFactory Configuration -->
+<bean id="sessionFactory" class="org.springframework.orm.hibernate5.LocalSessionFactoryBean">
+    <property name="dataSource" ref="myDataSource" />
+    <property name="packagesToScan" value="app.springhibernate.model" />
+    <property name="hibernateProperties">
+        <props>
+            <!-- Use PostgreSQL Dialect -->
+            <prop key="hibernate.dialect">org.hibernate.dialect.PostgreSQLDialect</prop>
+            <prop key="hibernate.show_sql">true</prop>
+            <prop key="hibernate.format_sql">true</prop>
+            <prop key="hibernate.hbm2ddl.auto">update</prop>
+        </props>
+    </property>
+</bean>
 
     <!-- Enable Annotation-Driven Transaction Management -->
     

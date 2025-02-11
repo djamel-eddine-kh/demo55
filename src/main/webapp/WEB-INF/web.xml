@@ -32,10 +32,6 @@
         <param-name>jakarta.faces.AUTOMATIC_EXTENSIONLESS_MAPPING</param-name>
         <param-value>true</param-value>
     </context-param>
- <servlet>
-    <servlet-name>FileDownloadController</servlet-name>
-    <servlet-class>controller.FileDownloadController</servlet-class>
-</servlet>
  <context-param>
     <param-name>contextConfigLocation</param-name>
     <param-value>/WEB-INF/beans.xml</param-value>
