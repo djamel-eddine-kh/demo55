@@ -14,9 +14,7 @@
 </context-param>
 
   <!-- JSF Configuration -->
-    <listener>
-    <listener-class>org.jboss.weld.environment.servlet.Listener</listener-class>
-</listener>
+
     <servlet>
         <servlet-name>facesServlet</servlet-name>
         <servlet-class>jakarta.faces.webapp.FacesServlet</servlet-class>
@@ -36,6 +34,9 @@
     <param-name>contextConfigLocation</param-name>
     <param-value>/WEB-INF/beans.xml</param-value>
 </context-param>
+  <listener>
+    <listener-class>org.jboss.weld.environment.servlet.Listener</listener-class>
+</listener>
     <listener>
     <listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
 </listener>

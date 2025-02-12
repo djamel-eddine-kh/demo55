@@ -1,66 +1,154 @@
-  <ui:composition xmlns="http://www.w3.org/1999/xhtml" 
-      xmlns:h="jakarta.faces.html"
-      xmlns:f="jakarta.faces.core"
-      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
-      xmlns:p="http://primefaces.org/ui">
-      <h:form>
-        <p:panel header="Fiche Controle Details" styleClass="info-card">
-            <h:panelGrid columns="2" cellpadding="5">
-                <h:outputText value="Date Début Contrôle:" styleClass="info-label"/>
-                <h:outputText value="#{ficheControleBean.dto.dateDC}"/>
-                
-                <h:outputText value="Date Fin Contrôle:" styleClass="info-label"/>
-                <h:outputText value="#{ficheControleBean.dto.dateDF}"/>
-                
-                <h:outputText value="Code Article:" styleClass="info-label"/>
-                <h:outputText value="#{ficheControleBean.dto.codeArticle}"/>
-                
-                <h:outputText value="Désignation:" styleClass="info-label"/>
-                <h:outputText value="#{ficheControleBean.dto.designation}"/>
-                
-                <h:outputText value="Numéro de Lot:" styleClass="info-label"/>
-                <h:outputText value="#{ficheControleBean.dto.numLot}"/>
-                
-                <h:outputText value="Quantité:" styleClass="info-label"/>
-                <h:outputText value="#{ficheControleBean.dto.quantity}"/>
-            </h:panelGrid>
-        </p:panel>
-    
-        <p:panel header="Liste des Références">
-            <p:dataTable var="ref" value="#{referenceBean.references}" paginator="true" rows="10">
-                <p:column headerText="ID">
-                    <h:outputText value="#{ref.id}"/>
-                </p:column>
-                <p:column headerText="Libellé">
-                    <h:outputText value="#{ref.libelle}"/>
-                </p:column>
-                <p:column headerText="Désignation 1">
-                    <h:outputText value="#{ref.designation1}"/>
-                </p:column>
-                <p:column headerText="Désignation 2">
-                    <h:outputText value="#{ref.designation2}"/>
-                </p:column>
-                <p:column headerText="Actions">
-                    <p:commandButton value="Modifier" icon="pi pi-pencil" actionListener="#{referenceBean.edit(ref)}" update=":dialogs:refDialog" oncomplete="PF('refDialog').show()"/>
-                    <p:commandButton value="Supprimer" icon="pi pi-trash" actionListener="#{referenceBean.delete(ref)}" update=":form:table"/>
-                </p:column>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" 
+    xmlns:h="jakarta.faces.html"
+    xmlns:f="jakarta.faces.core"
+    xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+    xmlns:p="http://primefaces.org/ui">
+    <h:head>
+    <title>Enterprise Test Quality Dashboard</title>
+    <h:outputStylesheet name="css/styles.css" />
+  </h:head>
+  <h:body>
+    <h:form id="dashboardForm">
+      <p:growl id="messages" showDetail="true" />
+      
+      <div class="dashboard-container">
+        <!-- Dashboard Header -->
+        <div class="dashboard-header">
+          <h1 class="dashboard-title">
+            <i class="pi pi-chart-line"></i>
+            Test Quality Dashboard
+          </h1>
+        </div>
+
+        <!-- Test Quality Section -->
+        <h:panelGroup layout="block" styleClass="section-header">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
+            <h2 style="margin: 0; font-size: 1.5rem; color: #1e293b;">Test Quality Records</h2>
+            <p:commandButton value="Add New Test" icon="pi pi-plus" 
+                           styleClass="custom-button button-primary"
+                           oncomplete="PF('testQualityDialog').show();" 
+                           update=":dashboardForm:testQualityDialog" />
+          </div>
+        </h:panelGroup>
+
+        <div class="card-container">
+          <p:dataList id="qualityList" value="#{testDeQualiteController.testQualityList}" var="quality"
+                      rows="10" paginator="true" layout="grid">
+            <div class="quality-card">
+              <div class="card-header">
+                <span>#{quality.codeArticle}</span>
+                <span class="status-badge status-active">Active</span>
+              </div>
+              <div class="card-body">
+                <div class="info-row">
+                  <span class="info-label">Start Date</span>
+                  <span class="info-value">
+                    <i class="pi pi-calendar"></i> #{quality.dateDC}
+                  </span>
+                </div>
+                <div class="info-row">
+                  <span class="info-label">End Date</span>
+                  <span class="info-value">
+                    <i class="pi pi-calendar"></i> #{quality.dateDF}
+                  </span>
+                </div>
+                <div class="info-row">
+                  <span class="info-label">Designation</span>
+                  <span class="info-value">#{quality.designation}</span>
+                </div>
+                <div class="info-row">
+                  <span class="info-label">Type</span>
+                  <span class="info-value">#{quality.type}</span>
+                </div>
+              </div>
+              <div class="card-actions">
+                <p:commandButton icon="pi pi-pencil" title="Edit" 
+                               styleClass="custom-button"
+                               actionListener="#{testDeQualiteController.setSelectedTestQuality(quality)}"
+                               update=":dashboardForm:testQualityDialog" 
+                               oncomplete="PF('testQualityDialog').show();" />
+                <p:commandButton icon="pi pi-trash" title="Delete" 
+                               styleClass="custom-button button-danger"
+                               actionListener="#{testDeQualiteController.deleteTestQuality(quality)}"
+                               update="qualityList messages">
+                  <p:confirm header="Confirmation" 
+                            message="Are you sure you want to delete this record?" 
+                            icon="pi pi-exclamation-triangle" />
+                </p:commandButton>
+                <p:commandButton value="Details" icon="pi pi-list" 
+                               styleClass="custom-button button-primary"
+                               actionListener="#{testDeQualiteController.setSelectedTestQuality(quality)}"
+                               update=":dashboardForm:addLigneTestDialog" 
+                               oncomplete="PF('addLigneTestDialog').show();" />
+              </div>
+            </div>
+          </p:dataList>
+        </div>
+
+        <!-- Reference Section -->
+        <div class="reference-section">
+          <div class="reference-header">
+            <h2 style="margin: 0; font-size: 1.5rem; color: #1e293b;">Reference Records</h2>
+            <p:commandButton value="Add Reference" icon="pi pi-plus" 
+                           styleClass="custom-button button-primary"
+                           oncomplete="PF('referenceDialog').show();" 
+                           update=":dashboardForm:referenceDialog"
+
+ />
+          </div>
+
+          <h:form id="referenceForm">
+            <p:dataTable value="#{testDeQualiteController.referenceList}" var="ref" 
+                        id="referenceList"
+                        paginator="true" rows="10"
+                        styleClass="custom-datatable"
+                        paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                        currentPageReportTemplate="{startRecord}-{endRecord} of {totalRecords} records"
+                        rowsPerPageTemplate="5,10,20">
+              
+              <p:column headerText="Libellé" sortBy="#{ref.libelle}">
+                <h:outputText value="#{ref.libelle}" />
+              </p:column>
+              
+              <p:column headerText="Designation1" sortBy="#{ref.designation1}">
+                <h:outputText value="#{ref.designation1}" />
+              </p:column>
+              
+              <p:column headerText="Designation2" sortBy="#{ref.designation2}">
+                <h:outputText value="#{ref.designation2}" />
+              </p:column>
+              
+              <p:column headerText="Actions" style="width:100px;text-align:center">
+                <p:commandButton icon="pi pi-pencil" 
+                 styleClass="custom-button"
+                 actionListener="#{testDeQualiteController.setSelectedReference(ref)}"
+                 update="dashboardForm:referenceDialog" 
+                 oncomplete="PF('referenceDialog').show();" />
+
+                <p:commandButton icon="pi pi-trash" 
+                               styleClass="custom-button button-danger"
+                               actionListener="#{testDeQualiteController.deleteReference(ref)}"
+                               update="referenceList messages">
+                  <p:confirm header="Confirmation" 
+                            message="Are you sure you want to delete this reference?" 
+                            icon="pi pi-exclamation-triangle" />
+                </p:commandButton>
+              </p:column>
             </p:dataTable>
-        </p:panel>
+          </h:form>
+        </div>
+      </div>
+
+      <!-- Include dialogs -->
+      <ui:include src="testQualityDialog.xhtml" />
+      <ui:include src="addLigneTestDialog.xhtml" />
+      <ui:include src="referenceDialog.xhtml" />
+
+      <!-- Confirmation Dialog -->
+      <p:confirmDialog global="true" showEffect="fade" hideEffect="fade" responsive="true" width="350">
+        <p:commandButton value="No" type="button" styleClass="ui-confirmdialog-no ui-button-flat"/>
+        <p:commandButton value="Yes" type="button" styleClass="ui-confirmdialog-yes" />
+      </p:confirmDialog>
     </h:form>
-    
-    <h:form id="dialogs">
-        <p:dialog header="Modifier Référence" widgetVar="refDialog" modal="true">
-            <h:panelGrid columns="2">
-                <h:outputLabel for="libelle" value="Libellé:"/>
-                <p:inputText id="libelle" value="#{referenceBean.selectedReference.libelle}" required="true"/>
-                
-                <h:outputLabel for="designation1" value="Désignation 1:"/>
-                <p:inputText id="designation1" value="#{referenceBean.selectedReference.designation1}" required="true"/>
-                
-                <h:outputLabel for="designation2" value="Désignation 2:"/>
-                <p:inputText id="designation2" value="#{referenceBean.selectedReference.designation2}" required="true"/>
-            </h:panelGrid>
-            <p:commandButton value="Enregistrer" actionListener="#{referenceBean.save()}" oncomplete="PF('refDialog').hide()" update=":form:table"/>
-        </p:dialog>
-    </h:form>
-    </ui:composition>
+  </h:body>
+</ui:composition>

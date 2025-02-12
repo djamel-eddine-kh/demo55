@@ -7,7 +7,8 @@
            http://www.springframework.org/schema/beans/spring-beans.xsd
            http://www.springframework.org/schema/context
            http://www.springframework.org/schema/context/spring-context.xsd
-    "   >
+    "   
+    >
 
   <!-- Enable Annotation-Based Configuration -->
     <ctx:component-scan base-package="come.example" />
@@ -51,7 +52,7 @@
     <!-- Hibernate SessionFactory Configuration -->
 <bean id="sessionFactory" class="org.springframework.orm.hibernate5.LocalSessionFactoryBean">
     <property name="dataSource" ref="myDataSource" />
-    <property name="packagesToScan" value="app.springhibernate.model" />
+    <property name="packagesToScan" value="come.example.model" />
     <property name="hibernateProperties">
         <props>
             <!-- Use PostgreSQL Dialect -->
@@ -65,5 +66,9 @@
 
     <!-- Enable Annotation-Driven Transaction Management -->
     
+    <!-- Hibernate Transaction Manager -->
+    <bean id="transactionManager" class="org.springframework.orm.hibernate5.HibernateTransactionManager">
+        <property name="sessionFactory" ref="sessionFactory" />
+    </bean>
 
 </beans>

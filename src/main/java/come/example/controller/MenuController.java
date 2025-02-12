@@ -42,7 +42,7 @@ public class MenuController implements Serializable {
                 this.activePage = "/welcomeComp.xhtml";
                 break;
             case 3:
-                logger.info(value + " clicked - navigating to Welcome");
+                logger.info(value + " clicked - navigating to reference");
                 this.activePage = "/ui/Reference.xhtml";
                 break;
 

@@ -7,9 +7,10 @@ import come.example.model.Reference;
 
 public interface ReferenceDao {
 
-	public void add(Reference d);
-    public List<Reference> getReferences();
-    public Reference getReference(Integer id);
-    public void delete(Reference d);
-    public void updateData(Reference d);
+	public void addReference(Reference d);
+    public List<Reference> getReferenceList();
+    public Reference getReferenceById(Integer id);
+    public void deleteReference(Reference d);
+    public void updateReference(Reference d);
 }
+ 

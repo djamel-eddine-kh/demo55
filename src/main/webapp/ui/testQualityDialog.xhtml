@@ -1,0 +1,39 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" 
+      xmlns:h="jakarta.faces.html"
+      xmlns:f="jakarta.faces.core"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui">
+  <p:dialog header="Test Quality" widgetVar="testQualityDialog" modal="true" resizable="false"
+            id="testQualityDialog" closable="true" showEffect="fade" lazy="false" hideEffect="fade">
+    <h:panelGrid columns="2" cellpadding="5">
+       <p:outputLabel for="dateDC" value="Date Start:" />
+      <p:datePicker id="dateDC" value="#{testDeQualiteController.selectedTestQuality.dateDC}"
+                    pattern="dd/MM/yyyy" required="true" />
+
+      <p:outputLabel for="dateDF" value="Date End:" />
+      <p:datePicker id="dateDF" value="#{testDeQualiteController.selectedTestQuality.dateDF}"
+                    pattern="dd/MM/yyyy" required="true" />
+
+      <p:outputLabel for="codeArticle" value="Code Article:" />
+      <p:inputText id="codeArticle" value="#{testDeQualiteController.selectedTestQuality.codeArticle}" required="true" />
+
+      <p:outputLabel for="designation" value="Designation:" />
+      <p:inputText id="designation" value="#{testDeQualiteController.selectedTestQuality.designation}" required="true" />
+
+      <p:outputLabel for="numLot" value="Lot Number:" />
+      <p:inputText id="numLot" value="#{testDeQualiteController.selectedTestQuality.numLot}" required="true" />
+
+      <p:outputLabel for="quantity" value="Quantity:" />
+      <p:inputText id="quantity" value="#{testDeQualiteController.selectedTestQuality.quantity}" required="true" />
+
+      <p:outputLabel for="type" value="Type:" />
+      <p:selectOneMenu id="type" value="#{testDeQualiteController.selectedTestQuality.type}">
+        <f:selectItem itemLabel="Template (Standard)" itemValue="TEMPLATE" />
+        <f:selectItem itemLabel="Custom" itemValue="CUSTOM" />
+      </p:selectOneMenu>
+    </h:panelGrid>
+    <p:commandButton value="Save" action="#{testDeQualiteController.saveTestQuality}"
+                     update=":dashboardForm:qualityList :dashboardForm:messages"
+                     oncomplete="PF('testQualityDialog').hide();" styleClass="ui-button-success" />
+  </p:dialog>
+</ui:composition>

@@ -1,0 +1,25 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" 
+      xmlns:h="jakarta.faces.html"
+      xmlns:f="jakarta.faces.core"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui">
+  <p:dialog header="Add/Edit Test Line" widgetVar="addLigneTestDialog" modal="true" resizable="false"
+            id="addLigneTestDialog" closable="true" showEffect="fade" hideEffect="fade">
+    <h:panelGrid columns="2" cellpadding="5">
+      <p:outputLabel for="plage_reference" value="Plage Reference:" />
+      <p:inputText id="plage_reference" value="#{testDeQualiteController.selectedLigneTest.plage_reference}" required="true" />
+
+      <p:outputLabel for="valeur_mesure" value="Valeur Mesure:" />
+      <p:inputText id="valeur_mesure" value="#{testDeQualiteController.selectedLigneTest.valeur_mesure}" required="true" />
+
+      <p:outputLabel for="reference" value="Reference:" />
+      <p:selectOneMenu id="reference" value="#{testDeQualiteController.selectedLigneTest.reference}">
+        <f:selectItems value="#{TestDeQualiteController.referenceList}" var="ref"
+                       itemLabel="#{ref.libelle}" itemValue="#{ref}" />
+      </p:selectOneMenu>
+    </h:panelGrid>
+    <p:commandButton value="Save" action="#{testDeQualiteController.saveLigneTest}"
+                     update=":dashboardForm:ligneTestPanel :dashboardForm:messages"
+                     oncomplete="PF('addLigneTestDialog').hide();" styleClass="ui-button-success" />
+  </p:dialog>
+</ui:composition>

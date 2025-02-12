@@ -28,7 +28,7 @@
 			<groupId>org.primefaces</groupId>
 			<artifactId>primefaces</artifactId>
 			<version>14.0.1</version>
-				 <classifier>jakarta</classifier>
+			 <classifier>jakarta</classifier>
 			    <exclusions>
         <exclusion>
             <groupId>com.itextpdf</groupId>
@@ -41,7 +41,12 @@
 			<artifactId>resources-optimizer-maven-plugin</artifactId>
 			<version>2.6.4</version>
 		</dependency>
-	
+		<dependency>
+			<groupId>org.primefaces.extensions</groupId>
+			<artifactId>primefaces-extensions</artifactId>
+			    <version>14.0.1</version> <!-- Use the appropriate version -->
+    <classifier>jakarta</classifier>
+		</dependency>
    <dependency>
         <groupId>javax.xml.bind</groupId>
         <artifactId>jaxb-api</artifactId>
@@ -73,6 +78,7 @@
     <version>4.1.2</version>
 </dependency>
 
+        <!-- https://mvnrepository.com/artifact/jakarta.servlet/jakarta.servlet-api -->
         <dependency>
             <groupId>jakarta.servlet</groupId>
             <artifactId>jakarta.servlet-api</artifactId>
